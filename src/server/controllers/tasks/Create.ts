@@ -22,5 +22,5 @@ export const create = async (req: Request<reqParams, resBody, iBodyProps>, res: 
 
     console.log(req.body)
 
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send('Not Finished!')
+    return res.status(StatusCodes.CREATED).send('Not Finished!')
 }
