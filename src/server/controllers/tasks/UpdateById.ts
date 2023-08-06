@@ -9,7 +9,8 @@ interface iParamProps {
 
 interface iBodyProps {
     name: string,
-    description?: string
+    description?: string,
+    status: number
 }
 
 interface resBody { }
@@ -17,7 +18,8 @@ interface resBody { }
 export const updateByIdValidation = Validation(getSchema => ({
     body: getSchema<iBodyProps>(yup.object().shape({
         name: yup.string().required(),
-        description: yup.string()
+        description: yup.string(),
+        status: yup.number().default(0).min(0)
     })),
     params: getSchema<iParamProps>(yup.object().shape({
         id: yup.number().integer().required().moreThan(0)
@@ -26,8 +28,11 @@ export const updateByIdValidation = Validation(getSchema => ({
 
 export const updateById = async (req: Request<iParamProps, resBody, iBodyProps>, res: Response) => {
 
-    console.log(req.params)
-    console.log(req.body)
+    if (Number(req.params.id) === 9999) return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        errors: {
+            default: 'Register not found'
+        }
+    })
 
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send('Not Finished!')
+    return res.status(StatusCodes.NO_CONTENT).send()
 }
