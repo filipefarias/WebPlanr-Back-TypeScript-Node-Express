@@ -3,11 +3,14 @@ import 'dotenv/config'
 import { router } from './routes'
 import cors from 'cors'
 
-const app = express()
+// To translate Yup error messages to Portuguese remove the comment above
+// import './shared/services/TranslationsYup'
 
-app.use(router)
+const app = express()
 app.use(express.json())
 app.use(cors())
+
+app.use(router)
 
 export { app }
 
