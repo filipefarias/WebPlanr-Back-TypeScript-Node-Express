@@ -1,12 +1,11 @@
-import { iCategories } from '../../models'
-
+import { iBoard, iTask, iTaskStatus, iUser, iUserStatus } from '../../models'
 
 declare module 'knex/types/tables' {
     interface Tables {
-        categories: iCategories,
-        // task: iTask,
-        // user: iUser
-        // task_status: iTaskStatus
-        // user_status: iUserStatus
+        boards: iBoard,
+        tasks: iTask,
+        users: iUser
+        taskStatus: iTaskStatus
+        userStatus: iUserStatus
     }
 }

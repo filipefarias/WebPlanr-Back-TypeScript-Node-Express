@@ -1,7 +1,8 @@
 import { Request, Response } from 'express'
-import { Validation } from '../../shared/middleware'
-import * as yup from 'yup'
 import { StatusCodes } from 'http-status-codes'
+import * as yup from 'yup'
+import { TasksProvider } from '../../database/providers/tasks'
+import { Validation } from '../../shared/middleware'
 
 interface iParamProps {
     id?: number
@@ -14,15 +15,22 @@ export const getByIdValidation = Validation(getSchema => ({
 }))
 
 export const getById = async (req: Request<iParamProps>, res: Response) => {
+    if (!req.params.id) {
+        return res.status(StatusCodes.BAD_REQUEST).json({
+            errors: {
+                default: 'ID parameter needs to be declared.'
+            }
+        })
+    }
 
-    if (Number(req.params.id) === 9999) return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-        errors: {
-            default: 'Register not found'
-        }
-    })
+    const result = await TasksProvider.getById(req.params.id)
+    if (result instanceof Error) {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+            errors: {
+                default: result.message
+            }
+        })
+    }
 
-    return res.status(StatusCodes.OK).json({
-        id: 1,
-        name: 'Go to market'
-    })
+    return res.status(StatusCodes.OK).send(result)
 }
