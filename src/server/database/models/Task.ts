@@ -3,5 +3,6 @@ export interface iTask {
     name: string,
     description?: string,
     board: number,
-    status: number
+    status: number,
+    urgent: boolean
 }

@@ -15,7 +15,8 @@ export const createValidation = Validation(getSchema => ({
         name: yup.string().required(),
         description: yup.string().optional(),
         board: yup.number().required(),
-        status: yup.number().default(0).min(0) 
+        status: yup.number().default(0).min(0),
+        urgent: yup.boolean().default(false)
     }))
 }))
 
