@@ -1,9 +1,9 @@
-import knex from 'knex'
+import { Knex } from '../../knex'
 import { ETableNames } from '../../ETableNames'
 
 export const count = async (filter = ''): Promise<number | Error> => {
     try {
-        const [{ count }] = await knex(ETableNames.boards)
+        const [{ count }] = await Knex(ETableNames.boards)
             .where('name', 'like', `%${filter}%`)
             .count<[{ count: number }]>('* as count')
 

@@ -6,7 +6,7 @@ import { iUser } from '../../database/models'
 import { UsersProvider } from '../../database/providers/users'
 
 interface iBodyProps extends Omit<iUser, 'id'> {
-    confirmPassword: string
+    confirmPassword?: string
 }
 
 interface reqParams { }
@@ -33,7 +33,10 @@ export const signUpValidation = Validation(getSchema => ({
 }))
 
 export const signUp = async (req: Request<reqParams, resBody, iBodyProps>, res: Response) => {
-    const result = await UsersProvider.create(req.body)
+    const userData = req.body
+    delete userData.confirmPassword
+    
+    const result = await UsersProvider.create(userData)
 
     if (result instanceof Error) {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({

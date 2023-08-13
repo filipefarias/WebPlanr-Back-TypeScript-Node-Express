@@ -1,10 +1,10 @@
-import knex from 'knex'
+import { Knex } from '../../knex'
 import { ETableNames } from '../../ETableNames'
 import { iTask } from '../../models'
 
 export const updateById = async (id: number, task: Omit<iTask, 'id'>): Promise<void | Error> => {
     try {
-        const result = await knex(ETableNames.tasks)
+        const result = await Knex(ETableNames.tasks)
             .update(task)
             .where('id', '=', id)
 

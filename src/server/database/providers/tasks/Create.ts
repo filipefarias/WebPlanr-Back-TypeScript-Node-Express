@@ -1,10 +1,10 @@
-import knex from 'knex'
+import { Knex } from '../../knex'
 import { iTask } from '../../models'
 import { ETableNames } from '../../ETableNames'
 
 export const create = async (task: Omit<iTask, 'id'>): Promise<number | Error> => {
     try {
-        const [result] = await knex(ETableNames.tasks).insert(task).returning('id')
+        const [result] = await Knex(ETableNames.tasks).insert(task).returning('id')
 
         if (typeof result === 'object') {
             return result.id

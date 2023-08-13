@@ -1,18 +1,22 @@
-import knex from 'knex'
+import { Knex } from '../../knex'
 import { iUser } from '../../models'
 import { ETableNames } from '../../ETableNames'
+import { PasswordCrypto } from '../../../shared/services/PasswordCrypto'
 
-export const create = async (user: Omit<iUser, 'id'>): Promise<number | Error> => {
+
+export const create = async (user: Omit<iUser, 'id' | 'confirmPassword'>): Promise<number | Error> => {
     try {
 
-        const userAlreadyExists = await knex(ETableNames.users)
+        const userAlreadyExists = await Knex(ETableNames.users)
             .select('id')
             .where('email', '=', user.email)
             .first()
 
-        if (userAlreadyExists > 0) return new Error('User already exists')
+        if (userAlreadyExists) return new Error('User already exists')
 
-        const [result] = await knex(ETableNames.users).insert(user).returning('id')
+        const hashedPassword = await PasswordCrypto.hashPassword(user.password)
+
+        const [result] = await Knex(ETableNames.users).insert({...user, password: hashedPassword}).returning('id')
 
         if (typeof result === 'object') {
             return result.id
@@ -23,7 +27,7 @@ export const create = async (user: Omit<iUser, 'id'>): Promise<number | Error> =
         return new Error('Error while creating register')
     } catch (error) {
 
-        return new Error('Error while creating register')
+        return new Error('Error while creating register 2')
     }
 
 } 

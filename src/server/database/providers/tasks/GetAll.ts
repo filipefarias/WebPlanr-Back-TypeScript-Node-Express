@@ -1,10 +1,10 @@
-import knex from 'knex'
+import { Knex } from '../../knex'
 import { iTask } from '../../models'
 import { ETableNames } from '../../ETableNames'
 
 export const getAll = async (page: number, limit: number, filter: string, id = 0): Promise<iTask[] | Error> => {
     try {
-        const result = await knex(ETableNames.tasks)
+        const result = await Knex(ETableNames.tasks)
             .select('*')
             .where('id', Number(id))
             .orWhere('name', 'like', `%${filter}%`)
@@ -12,7 +12,7 @@ export const getAll = async (page: number, limit: number, filter: string, id = 0
             .limit(limit)
 
         if (id > 0 && result.every(item => item.id !== id)) {
-            const resultById = await knex(ETableNames.tasks)
+            const resultById = await Knex(ETableNames.tasks)
                 .select('*')
                 .where('id', '=', id)
                 .first()

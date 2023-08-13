@@ -1,10 +1,10 @@
-import knex from 'knex'
+import { Knex } from '../../knex'
 import { iBoard } from '../../models'
 import { ETableNames } from '../../ETableNames'
 
 export const create = async (board: Omit<iBoard, 'id'>): Promise<number | Error> => {
     try {
-        const [result] = await knex(ETableNames.boards).insert(board).returning('id')
+        const [result] = await Knex(ETableNames.boards).insert(board).returning('id')
 
         if (typeof result === 'object') {
             return result.id
