@@ -7,8 +7,7 @@ export async function up(knex: Knex) {
         .schema
         .createTable(ETableNames.users, table => {
             table.bigIncrements('id').primary().index()
-            table.string('username',50).unique().index().notNullable().checkLength('<=', 50)
-            table.string('password').index().checkLength('>', 8).notNullable()
+            table.string('password').index().checkLength('>=', 8).notNullable()
             table.string('email').unique().index().notNullable()
             table.string('firstName', 50).notNullable()
             table.string('lastName', 50).notNullable()
