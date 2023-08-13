@@ -8,9 +8,18 @@ export async function up(knex: Knex) {
         .createTable(ETableNames.boards, table => {
             table.bigIncrements('id').primary().index()
             table.string('name').index().notNullable().checkLength('<=', 60)
-            table.foreign('owner', ETableNames.users).references('id')
             table.string('color').checkLength('<=', 7)
-            table.string('icon')
+            table.integer('icon')
+                .references('id')
+                .inTable(ETableNames.boardIcons)
+                .onUpdate('CASCADE')
+                .onDelete('RESTRICT')
+            table
+                .bigInteger('owner')
+                .references('id')
+                .inTable(ETableNames.users)
+                .onUpdate('CASCADE')
+                .onDelete('RESTRICT')
          
             table.comment('Table to save boards')
         })

@@ -9,9 +9,19 @@ export async function up(knex: Knex) {
             table.bigIncrements('id').primary().index()
             table.string('name').index().notNullable().checkLength('<=', 60)
             table.string('description', 400).checkLength('<=', 400)
-            table.foreign('board', ETableNames.boards).references('id')
-            table.foreign('status', ETableNames.taskStatus).references('id')
-         
+            table
+                .bigInteger('board')
+                .references('id')
+                .inTable(ETableNames.boards)
+                .onUpdate('CASCADE')
+                .onDelete('RESTRICT')
+            table
+                .integer('status')
+                .references('id')
+                .inTable(ETableNames.taskStatus)
+                .onUpdate('CASCADE')
+                .onDelete('RESTRICT')
+
             table.comment('Table to save tasks')
         })
         .then(() => {

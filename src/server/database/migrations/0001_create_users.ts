@@ -12,8 +12,13 @@ export async function up(knex: Knex) {
             table.string('email').unique().index().notNullable()
             table.string('firstName', 50).notNullable()
             table.string('lastName', 50).notNullable()
-            table.foreign('userStatus', ETableNames.userStatus).references('id')
-         
+            table
+                .integer('userStatus')
+                .references('id')
+                .inTable(ETableNames.userStatus)
+                .onUpdate('CASCADE')
+                .onDelete('RESTRICT')
+
             table.comment('Table to save users')
         })
         .then(() => {
